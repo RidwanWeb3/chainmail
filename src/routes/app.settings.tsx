@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { arcConfig, GITHUB_URL, X_URL } from "@/services/blockchain/arc";
+import { arcConfig, GITHUB_URL, xUrl } from "@/services/blockchain/arc";
 import { getContractState } from "@/services/blockchain/chainmail";
 import { PGP_STATUS } from "@/services/verification/pgp";
 
@@ -28,7 +28,7 @@ function Settings() {
   const contract = getContractState();
 
   const rows: [string, string][] = [
-    ["Network", arcConfig.chainName || "Arc"],
+    ["Network", "Arc"],
     ["Chain ID", arcConfig.chainId ? String(arcConfig.chainId) : "Not configured"],
     ["RPC endpoint", arcConfig.rpcUrl ? "Configured" : "Not configured"],
     ["Explorer", arcConfig.explorerUrl || "Not configured"],
@@ -69,16 +69,18 @@ function Settings() {
               GitHub
             </a>
           </li>
-          <li>
-            <a
-              href={X_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cyan hover:underline"
-            >
-              X
-            </a>
-          </li>
+          {xUrl && (
+            <li>
+              <a
+                href={xUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan hover:underline"
+              >
+                X
+              </a>
+            </li>
+          )}
         </ul>
       </section>
     </div>
