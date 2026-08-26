@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppComposeRouteImport } from './routes/app.compose'
+import { Route as AppIdentityRouteImport } from './routes/app.identity'
 import { Route as AppVerifyRouteImport } from './routes/app.verify'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const AppComposeRoute = AppComposeRouteImport.update({
   path: '/compose',
   getParentRoute: () => AppRoute,
 } as any)
+const AppIdentityRoute = AppIdentityRouteImport.update({
+  id: '/identity',
+  path: '/identity',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppVerifyRoute = AppVerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
@@ -45,12 +51,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
+  '/app/identity': typeof AppIdentityRoute
   '/app/verify': typeof AppVerifyRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/compose': typeof AppComposeRoute
+  '/app/identity': typeof AppIdentityRoute
   '/app/verify': typeof AppVerifyRoute
   '/app': typeof AppIndexRoute
 }
@@ -59,15 +67,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
+  '/app/identity': typeof AppIdentityRoute
   '/app/verify': typeof AppVerifyRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/app/compose' | '/app/verify' | '/app/'
+  fullPaths:
+    '/' | '/app' | '/app/compose' | '/app/identity' | '/app/verify' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/compose' | '/app/verify' | '/app'
-  id: '__root__' | '/' | '/app' | '/app/compose' | '/app/verify' | '/app/'
+  to: '/' | '/app/compose' | '/app/identity' | '/app/verify' | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/compose'
+    | '/app/identity'
+    | '/app/verify'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,6 +122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppComposeRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/identity': {
+      id: '/app/identity'
+      path: '/identity'
+      fullPath: '/app/identity'
+      preLoaderRoute: typeof AppIdentityRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/verify': {
       id: '/app/verify'
       path: '/verify'
@@ -117,12 +141,14 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppComposeRoute: typeof AppComposeRoute
+  AppIdentityRoute: typeof AppIdentityRoute
   AppVerifyRoute: typeof AppVerifyRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppComposeRoute: AppComposeRoute,
+  AppIdentityRoute: AppIdentityRoute,
   AppVerifyRoute: AppVerifyRoute,
   AppIndexRoute: AppIndexRoute,
 }
