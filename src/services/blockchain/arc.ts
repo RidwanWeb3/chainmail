@@ -59,8 +59,10 @@ export const contractAddress = envValue(
 
 export const xUrl = envValue(import.meta.env["VITE_CHAINMAIL_X_URL"]);
 
+export const BUY_URL =
+  envValue(import.meta.env["VITE_CHAINMAIL_BUY_URL"]) ?? "https://radardex.pro";
+
 export const GITHUB_URL = "https://github.com/zepeng811/chainmail";
-export const BUY_URL = "https://radardex.pro";
 
 export function explorerAddressUrl(address: string): string | null {
   if (!arcConfig.explorerUrl) return null;
