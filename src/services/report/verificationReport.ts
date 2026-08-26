@@ -54,6 +54,8 @@ export function downloadReportPdf(report: VerificationReport): void {
   const width = doc.internal.pageSize.getWidth();
   const maxWidth = width - margin * 2;
   let y = margin;
+  const link =
+    typeof window === "undefined" ? "" : shareLink(report);
 
   const line = (
     text: string,
@@ -79,9 +81,9 @@ export function downloadReportPdf(report: VerificationReport): void {
 
   if (report.mode === "demo") {
     doc.setFillColor(240, 236, 255);
-    doc.rect(margin, y - 12, maxWidth, 30, "F");
+    doc.rect(margin, y - 12, maxWidth, 34, "F");
     doc.setTextColor(90, 40, 180);
-    line(DEMO_NOTICE, 9, "bold", 24);
+    line(DEMO_NOTICE, 9, "bold", 28);
     doc.setTextColor(0, 0, 0);
   }
 
@@ -89,7 +91,9 @@ export function downloadReportPdf(report: VerificationReport): void {
   line(`Result: ${report.verified ? "VERIFIED" : "NOT VERIFIED"}`, 13, "bold", 20);
   line(`Report ID: ${report.id}`);
   line(`Generated: ${formatTimestamp(report.createdAt)}`);
-  line(`Mode: ${report.mode === "demo" ? "Demo (simulated)" : "Live wallet signature"}`);
+  line(
+    `Mode: ${report.mode === "demo" ? "Demo (simulated — no blockchain check)" : "Live wallet signature (off-chain cryptographic check)"}`,
+  );
   line(`Identity: ${report.identity ?? "—"}`);
   line(`Claimed sender: ${report.sender}`);
   line(`Recovered signer: ${report.recovered ?? "—"}`);
@@ -109,9 +113,15 @@ export function downloadReportPdf(report: VerificationReport): void {
     line(formatTimestamp(s.timestamp), 8, "normal", 16);
   });
 
-  y += 4;
+  y += 8;
+  if (link) {
+    line("Shareable link (open this URL to reload the report)", 10, "bold", 14);
+    line(link, 8);
+    y += 8;
+  }
+
   line(
-    "A wallet signature is an off-chain cryptographic proof and is not a blockchain transaction.",
+    "A wallet signature is an off-chain cryptographic proof and is not a blockchain transaction. Demo mode never touches a wallet or a smart contract.",
     8,
   );
 

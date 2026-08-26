@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { arcConfig } from "@/services/blockchain/arc";
+import { arcConfig, walletAddEthereumChainParams } from "@/services/blockchain/arc";
 
 type Eip1193Provider = {
   request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>;
@@ -28,6 +28,7 @@ export type WalletState = {
   error: string | null;
   hasProvider: boolean;
   wrongNetwork: boolean;
+  switchingNetwork: boolean;
   connect: () => Promise<void>;
   disconnect: () => void;
   signMessage: (message: string) => Promise<string>;
@@ -46,6 +47,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
   const [connecting, setConnecting] = useState(false);
+  const [switchingNetwork, setSwitchingNetwork] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasProvider, setHasProvider] = useState(false);
 
@@ -139,13 +141,49 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       setError("Arc network configuration is not available yet.");
       return;
     }
+    setSwitchingNetwork(true);
+    setError(null);
     try {
-      await provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: arcConfig.chainIdHex }],
-      });
-    } catch {
-      setError("Please switch to Arc.");
+      try {
+        await provider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: arcConfig.chainIdHex }],
+        });
+      } catch (switchErr) {
+        const code = (switchErr as { code?: number })?.code;
+        if (code === 4902 || code === -32603) {
+          const addParams = walletAddEthereumChainParams();
+          if (!addParams) {
+            setError("Arc is not configured. Check VITE_ARC_RPC_URL and chain ID.");
+            return;
+          }
+          await provider.request({
+            method: "wallet_addEthereumChain",
+            params: [addParams],
+          });
+          try {
+            await provider.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: arcConfig.chainIdHex }],
+            });
+          } catch {
+            setError(`Please approve adding and switching to ${arcConfig.chainName}.`);
+          }
+        } else if (code === 4001) {
+          setError("Network switch cancelled by the user.");
+        } else {
+          setError(`Please switch to ${arcConfig.chainName} in your wallet.`);
+        }
+      }
+    } catch (addErr) {
+      const code = (addErr as { code?: number })?.code;
+      setError(
+        code === 4001
+          ? "Network add cancelled by the user."
+          : `Unable to add ${arcConfig.chainName}. Configure it manually in your wallet using the RPC URL on the Settings page.`,
+      );
+    } finally {
+      setSwitchingNetwork(false);
     }
   }, []);
 
@@ -158,13 +196,25 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       hasProvider,
       wrongNetwork:
         Boolean(address) && arcConfig.configured && chainId !== arcConfig.chainId,
+      switchingNetwork,
       connect,
       disconnect,
       signMessage,
       switchToArc,
       clearError: () => setError(null),
     }),
-    [address, chainId, connecting, error, hasProvider, connect, disconnect, signMessage, switchToArc],
+    [
+      address,
+      chainId,
+      connecting,
+      error,
+      hasProvider,
+      switchingNetwork,
+      connect,
+      disconnect,
+      signMessage,
+      switchToArc,
+    ],
   );
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

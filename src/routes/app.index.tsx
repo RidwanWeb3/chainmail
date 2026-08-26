@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { IdentityCard } from "@/components/IdentityCard";
+import { NetworkPrompt } from "@/components/NetworkPrompt";
 import { useWallet } from "@/hooks/useWallet";
 import { PGP_STATUS } from "@/services/verification/pgp";
 
@@ -35,6 +36,8 @@ function Overview() {
           Trust the sender. Verify the message.
         </p>
       </header>
+
+      <NetworkPrompt />
 
       {!hasProvider && (
         <p role="status" className="panel border-destructive/40 p-4 text-sm text-muted-foreground">

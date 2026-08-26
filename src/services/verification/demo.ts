@@ -8,6 +8,7 @@
  */
 
 import { step, type VerificationReport, type VerificationStep } from "./steps";
+import { arcConfig } from "@/services/blockchain/arc";
 
 export const DEMO_NOTICE =
   "DEMO MODE — simulated PGP identity and signature. No blockchain verification is performed.";
@@ -25,7 +26,6 @@ async function sha256Hex(input: string): Promise<string> {
     .join("");
 }
 
-/** Simulated PGP fingerprint derived from the demo handle. */
 export async function demoFingerprint(handle: string): Promise<string> {
   const hex = await sha256Hex(`chainmail-demo-pgp:${handle}`);
   return (
@@ -36,13 +36,51 @@ export async function demoFingerprint(handle: string): Promise<string> {
   ).join(" ");
 }
 
-/** Simulated detached PGP signature over the demo message. */
 export async function demoSignature(handle: string, message: string): Promise<string> {
   const hex = await sha256Hex(`chainmail-demo-sig:${handle}:${message}`);
   return `SIMULATED-PGP:${hex}`;
 }
 
 export type DemoStageId = "identity" | "keypair" | "sign" | "verify";
+
+export type DemoStage = {
+  id: DemoStageId;
+  title: string;
+  description: string;
+  detail: string;
+};
+
+export const demoStages: DemoStage[] = [
+  {
+    id: "identity",
+    title: "1. Establish Identity",
+    description: "Choose a @handle that will be publicly linked to your cryptographic identity.",
+    detail:
+      "In production, your @handle is registered on-chain and mapped to a wallet address and PGP fingerprint.",
+  },
+  {
+    id: "keypair",
+    title: "2. PGP Key Pair",
+    description: "Generate a PGP key pair. The public fingerprint becomes part of your on-chain identity.",
+    detail:
+      "In production, the private key stays on your device; only the 40-character hex fingerprint is published.",
+  },
+  {
+    id: "sign",
+    title: "3. Sign Message",
+    description: "Sign a plaintext message with your private key to produce a detached PGP signature.",
+    detail:
+      "The signature covers the message digest and can be verified by anyone who holds your public key.",
+  },
+  {
+    id: "verify",
+    title: "4. Verify Message",
+    description:
+      "A verifier recovers the fingerprint from the signature and matches it against the on-chain identity.",
+    detail:
+      "A match confirms two things: the message was not tampered with, and it originated from the claimed identity.",
+  },
+];
 
 export async function runDemoVerification(
   handle: string,
@@ -53,33 +91,37 @@ export async function runDemoVerification(
   const expected = await demoSignature(handle, message);
   const matches = expected === signature;
 
+  const chainLabel = arcConfig.chainId ? `Arc chain ${arcConfig.chainId}` : "Arc network";
+
   const steps: VerificationStep[] = [
     step(
       "network",
       "Network check",
-      "Demo mode does not query a network. Arc chain 5042 is referenced for illustration only.",
+      matches
+        ? `Demo mode references ${chainLabel}. No on-chain lookup is performed.`
+        : `Network context: ${chainLabel} (illustrative only).`,
       "simulated",
     ),
     step(
       "pgp",
       "PGP key check",
-      `Simulated fingerprint ${fingerprint} resolved for @${handle}.`,
+      `Simulated fingerprint ${fingerprint} resolved for @${handle}. The fingerprint is deterministically derived from the handle for demo purposes.`,
       "simulated",
     ),
     step(
       "signature",
       "Signature validity",
       matches
-        ? "The simulated detached signature matches the message digest."
-        : "The simulated signature does not match the message digest.",
+        ? "The simulated detached PGP signature matches the message digest computed from the provided text."
+        : "The simulated signature does not match the expected digest for this message and @handle.",
       matches ? "simulated" : "failed",
     ),
     step(
       "identity",
       "Identity match",
       matches
-        ? `Signature key maps to the demo identity @${handle}.`
-        : "Signature key could not be mapped to the demo identity.",
+        ? `Signing key fingerprint maps to the registered demo identity @${handle}. The sender and recovered signer agree.`
+        : "The signing key could not be mapped to the claimed demo identity. Sender and recovered signer diverge.",
       matches ? "simulated" : "failed",
     ),
   ];

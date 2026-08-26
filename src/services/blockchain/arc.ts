@@ -11,6 +11,12 @@ export type ArcConfig = {
   chainIdHex: string | null;
   rpcUrl: string | null;
   explorerUrl: string | null;
+  chainName: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  };
   configured: boolean;
 };
 
@@ -27,8 +33,25 @@ export const arcConfig: ArcConfig = {
   chainIdHex: Number.isFinite(parsedChainId) ? `0x${parsedChainId.toString(16)}` : null,
   rpcUrl: envValue(import.meta.env["VITE_ARC_RPC_URL"]),
   explorerUrl: envValue(import.meta.env["VITE_ARC_EXPLORER_URL"]),
+  chainName: "Arc Mainnet",
+  nativeCurrency: {
+    name: "Arc",
+    symbol: "ARC",
+    decimals: 18,
+  },
   configured: Number.isFinite(parsedChainId),
 };
+
+export function walletAddEthereumChainParams(): unknown | null {
+  if (!arcConfig.configured || !arcConfig.chainIdHex || !arcConfig.rpcUrl) return null;
+  return {
+    chainId: arcConfig.chainIdHex,
+    chainName: arcConfig.chainName,
+    rpcUrls: [arcConfig.rpcUrl],
+    blockExplorerUrls: arcConfig.explorerUrl ? [arcConfig.explorerUrl] : undefined,
+    nativeCurrency: arcConfig.nativeCurrency,
+  };
+}
 
 export const contractAddress = envValue(
   import.meta.env["VITE_CHAINMAIL_CONTRACT_ADDRESS"],
