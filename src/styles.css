@@ -144,11 +144,7 @@
 }
 
 @utility panel {
-  background: linear-gradient(
-    160deg,
-    oklch(0.18 0.035 268 / 85%),
-    oklch(0.11 0.025 270 / 90%)
-  );
+  background: linear-gradient(160deg, oklch(0.18 0.035 268 / 85%), oklch(0.11 0.025 270 / 90%));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--glow-soft);
@@ -207,11 +203,7 @@
 }
 
 @utility flow-line {
-  background-image: linear-gradient(
-    to bottom,
-    var(--cyan) 0 8px,
-    transparent 8px 16px
-  );
+  background-image: linear-gradient(to bottom, var(--cyan) 0 8px, transparent 8px 16px);
   background-size: 2px 16px;
   animation: flow-line 1.4s linear infinite;
 }

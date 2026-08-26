@@ -98,9 +98,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       const code = (err as { code?: number })?.code;
       setError(
-        code === 4001
-          ? "Wallet connection cancelled."
-          : "Connect a compatible wallet to continue.",
+        code === 4001 ? "Wallet connection cancelled." : "Connect a compatible wallet to continue.",
       );
     } finally {
       setConnecting(false);
@@ -126,9 +124,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       } catch (err) {
         const code = (err as { code?: number })?.code;
         throw new Error(
-          code === 4001
-            ? "Signature request cancelled."
-            : "The message could not be signed.",
+          code === 4001 ? "Signature request cancelled." : "The message could not be signed.",
         );
       }
     },
@@ -194,8 +190,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       connecting,
       error,
       hasProvider,
-      wrongNetwork:
-        Boolean(address) && arcConfig.configured && chainId !== arcConfig.chainId,
+      wrongNetwork: Boolean(address) && arcConfig.configured && chainId !== arcConfig.chainId,
       switchingNetwork,
       connect,
       disconnect,

@@ -23,9 +23,7 @@ export type VerificationResult =
       reason: string;
     };
 
-export async function verifyWalletSignature(
-  input: VerificationInput,
-): Promise<VerificationResult> {
+export async function verifyWalletSignature(input: VerificationInput): Promise<VerificationResult> {
   const sender = input.sender.trim();
   const signature = input.signature.trim();
 

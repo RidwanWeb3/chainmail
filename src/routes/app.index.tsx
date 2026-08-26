@@ -32,17 +32,14 @@ function Overview() {
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold sm:text-3xl">Overview</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Trust the sender. Verify the message.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">Trust the sender. Verify the message.</p>
       </header>
 
       <NetworkPrompt />
 
       {!hasProvider && (
         <p role="status" className="panel border-destructive/40 p-4 text-sm text-muted-foreground">
-          Connect a compatible wallet to continue. You can still explore the interface in
-          demo mode.
+          Connect a compatible wallet to continue. You can still explore the interface in demo mode.
         </p>
       )}
       {error && (
@@ -67,9 +64,7 @@ function Overview() {
           </div>
           <div>
             <dt className="text-sm text-muted-foreground">Identity Status</dt>
-            <dd className="mt-1 font-mono text-lg">
-              {address ? "Connected" : "—"}
-            </dd>
+            <dd className="mt-1 font-mono text-lg">{address ? "Connected" : "—"}</dd>
           </div>
           <div>
             <dt className="text-sm text-muted-foreground">PGP</dt>

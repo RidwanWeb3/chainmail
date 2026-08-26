@@ -47,7 +47,10 @@ function Copyable({ value, label }: { value: string; label?: string }) {
 
   return (
     <span className="inline-flex items-center gap-2">
-      <span className="font-mono text-sm break-all text-foreground" title={label ? `${label}: ${value}` : undefined}>
+      <span
+        className="font-mono text-sm break-all text-foreground"
+        title={label ? `${label}: ${value}` : undefined}
+      >
         {value}
       </span>
       {enabled && (
@@ -97,7 +100,11 @@ function Settings() {
           <div className="flex flex-wrap items-center justify-between gap-3 py-3">
             <dt className="text-sm text-muted-foreground">RPC endpoint</dt>
             <dd className="font-mono text-sm break-all text-foreground">
-              {arcConfig.rpcUrl ? <Copyable value={arcConfig.rpcUrl} label="RPC endpoint" /> : "Not configured"}
+              {arcConfig.rpcUrl ? (
+                <Copyable value={arcConfig.rpcUrl} label="RPC endpoint" />
+              ) : (
+                "Not configured"
+              )}
             </dd>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 py-3">

@@ -53,16 +53,14 @@ export function walletAddEthereumChainParams(): unknown | null {
   };
 }
 
-export const contractAddress = envValue(
-  import.meta.env["VITE_CHAINMAIL_CONTRACT_ADDRESS"],
-);
+export const contractAddress = envValue(import.meta.env["VITE_CHAINMAIL_CONTRACT_ADDRESS"]);
 
 export const xUrl = envValue(import.meta.env["VITE_CHAINMAIL_X_URL"]);
 
 export const BUY_URL =
   envValue(import.meta.env["VITE_CHAINMAIL_BUY_URL"]) ?? "https://radardex.pro";
 
-export const GITHUB_URL = "https://github.com/zepeng811/chainmail";
+export const GITHUB_URL = "https://github.com/RidwanWeb3/chainmail";
 
 export function explorerAddressUrl(address: string): string | null {
   if (!arcConfig.explorerUrl) return null;

@@ -13,8 +13,7 @@ export function CTA() {
             Trust Every <span className="text-gradient">Message.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground">
-            Communication is evolving. CHAINMAIL adds a verifiable trust layer for the
-            on-chain era.
+            Communication is evolving. CHAINMAIL adds a verifiable trust layer for the on-chain era.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link

@@ -19,8 +19,8 @@ export function Problem() {
             Can You Trust the Sender?
           </h2>
           <p className="mt-4 text-base text-muted-foreground">
-            Digital communication can be difficult to authenticate. A recipient may
-            receive a message claiming to come from anyone at all.
+            Digital communication can be difficult to authenticate. A recipient may receive a
+            message claiming to come from anyone at all.
           </p>
           <ul className="mt-5 flex flex-wrap gap-2">
             {claimants.map((c) => (
@@ -41,8 +41,7 @@ export function Problem() {
           <HelpCircle className="mx-auto h-8 w-8 text-purple" aria-hidden="true" />
           <p className="mt-5 text-2xl font-bold sm:text-3xl">Who actually sent it?</p>
           <p className="mt-4 text-sm text-muted-foreground">
-            CHAINMAIL addresses this with cryptographic identity and blockchain-backed
-            verification.
+            CHAINMAIL addresses this with cryptographic identity and blockchain-backed verification.
           </p>
         </div>
       </Reveal>

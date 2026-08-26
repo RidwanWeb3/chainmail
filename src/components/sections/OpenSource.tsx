@@ -19,9 +19,9 @@ export function OpenSource() {
             Original Chainmail Repository
           </h2>
           <p className="mt-5 text-base text-muted-foreground">
-            CHAINMAIL is inspired by an open-source implementation of blockchain-backed
-            email authentication. That repository is the conceptual and technical
-            reference — it is not the Arc implementation.
+            CHAINMAIL is inspired by an open-source implementation of blockchain-backed email
+            authentication. That repository is the conceptual and technical reference — it is not
+            the Arc implementation.
           </p>
           <a
             href={GITHUB_URL}

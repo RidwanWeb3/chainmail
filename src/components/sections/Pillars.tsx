@@ -21,7 +21,10 @@ const pillars = [
 
 export function Pillars() {
   return (
-    <section aria-labelledby="pillars-title" className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6">
+    <section
+      aria-labelledby="pillars-title"
+      className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6"
+    >
       <h2 id="pillars-title" className="sr-only">
         Trust pillars
       </h2>
@@ -32,9 +35,7 @@ export function Pillars() {
         {pillars.map((p, i) => (
           <Reveal as="li" key={p.title} delay={i * 90} className="panel panel-hover p-6">
             <p.icon className="h-6 w-6 text-cyan" aria-hidden="true" />
-            <h3 className="mt-4 text-lg font-semibold tracking-[0.16em] uppercase">
-              {p.title}
-            </h3>
+            <h3 className="mt-4 text-lg font-semibold tracking-[0.16em] uppercase">{p.title}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{p.copy}</p>
           </Reveal>
         ))}

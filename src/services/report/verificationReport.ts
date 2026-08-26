@@ -40,9 +40,7 @@ export function decodeReport(encoded: string): VerificationReport | null {
 
 export function shareLink(report: VerificationReport): string {
   const base =
-    typeof window === "undefined"
-      ? ""
-      : `${window.location.origin}${window.location.pathname}`;
+    typeof window === "undefined" ? "" : `${window.location.origin}${window.location.pathname}`;
   return `${base}?r=${encodeReport(report)}`;
 }
 
@@ -54,15 +52,9 @@ export function downloadReportPdf(report: VerificationReport): void {
   const width = doc.internal.pageSize.getWidth();
   const maxWidth = width - margin * 2;
   let y = margin;
-  const link =
-    typeof window === "undefined" ? "" : shareLink(report);
+  const link = typeof window === "undefined" ? "" : shareLink(report);
 
-  const line = (
-    text: string,
-    size = 10,
-    style: "normal" | "bold" = "normal",
-    gap = 14,
-  ) => {
+  const line = (text: string, size = 10, style: "normal" | "bold" = "normal", gap = 14) => {
     doc.setFont("helvetica", style);
     doc.setFontSize(size);
     const parts = doc.splitTextToSize(text, maxWidth) as string[];

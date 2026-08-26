@@ -31,9 +31,7 @@ export function Features() {
       aria-labelledby="features-title"
       className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6"
     >
-      <p className="text-xs font-semibold tracking-[0.24em] text-violet uppercase">
-        Core Features
-      </p>
+      <p className="text-xs font-semibold tracking-[0.24em] text-violet uppercase">Core Features</p>
       <h2 id="features-title" className="mt-3 text-3xl font-bold sm:text-4xl">
         Infrastructure for verifiable communication.
       </h2>

@@ -38,9 +38,7 @@ export function IdentityCard() {
       <dl className="mt-5 grid gap-4 sm:grid-cols-3">
         {rows.map(([k, v]) => (
           <div key={k}>
-            <dt className="text-xs tracking-[0.16em] text-muted-foreground uppercase">
-              {k}
-            </dt>
+            <dt className="text-xs tracking-[0.16em] text-muted-foreground uppercase">{k}</dt>
             <dd className="mt-1 font-mono text-sm break-all text-foreground">
               {k === "Status" && v === "Connected" ? `✓ ${v}` : v}
             </dd>

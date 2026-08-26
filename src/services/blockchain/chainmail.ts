@@ -10,8 +10,7 @@
 import { arcConfig, contractAddress, explorerAddressUrl } from "./arc";
 
 export type ContractState =
-  | { status: "coming-soon" }
-  | { status: "configured"; address: string; explorerUrl: string | null };
+  { status: "coming-soon" } | { status: "configured"; address: string; explorerUrl: string | null };
 
 export function getContractState(): ContractState {
   if (!contractAddress) return { status: "coming-soon" };

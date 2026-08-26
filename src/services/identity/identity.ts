@@ -1,10 +1,16 @@
 /**
  * Chainmail identity (V1).
  *
- * V1 simply associates a user-chosen Chainmail handle with the connected
- * wallet, stored locally in the browser. No naming protocol, no custody,
- * no private key material is ever handled here.
+ * V1 associates a user-chosen Chainmail handle with the connected wallet.
+ * Mapping is stored locally in the browser (and, from V2 onwards, mirrored
+ * on-chain via the Arc registry contract).
+ *
+ * All inputs are validated with Zod — no handles reach storage without
+ * passing the schema.
  */
+
+import { handleSchema } from "@/lib/schemas";
+import { z } from "zod";
 
 const STORAGE_PREFIX = "chainmail:identity:";
 
@@ -14,37 +20,43 @@ export type ChainmailIdentity = {
   createdAt: string;
 };
 
+const identityShape = z.object({
+  handle: z.string(),
+  address: z.string(),
+  createdAt: z.string().datetime({ offset: true }),
+});
+
 export function normalizeHandle(raw: string): string {
-  return raw.trim().replace(/^@+/, "").toLowerCase();
+  const result = handleSchema.safeParse(raw);
+  return result.success ? result.data : "";
 }
 
 export function isValidHandle(raw: string): boolean {
-  const handle = normalizeHandle(raw);
-  return /^[a-z0-9_]{3,20}$/.test(handle);
+  return handleSchema.safeParse(raw).success;
 }
 
 export function loadIdentity(address: string): ChainmailIdentity | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_PREFIX + address.toLowerCase());
-    return raw ? (JSON.parse(raw) as ChainmailIdentity) : null;
+    if (!raw) return null;
+    const parsed = identityShape.safeParse(JSON.parse(raw));
+    return parsed.success ? parsed.data : null;
   } catch {
     return null;
   }
 }
 
 export function saveIdentity(address: string, handle: string): ChainmailIdentity {
+  const cleanHandle = handleSchema.parse(handle);
   const identity: ChainmailIdentity = {
-    handle: normalizeHandle(handle),
+    handle: cleanHandle,
     address,
     createdAt: new Date().toISOString(),
   };
   if (typeof window !== "undefined") {
     try {
-      window.localStorage.setItem(
-        STORAGE_PREFIX + address.toLowerCase(),
-        JSON.stringify(identity),
-      );
+      window.localStorage.setItem(STORAGE_PREFIX + address.toLowerCase(), JSON.stringify(identity));
     } catch {
       /* storage unavailable — identity stays in memory for this session */
     }

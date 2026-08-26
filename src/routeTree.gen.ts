@@ -14,8 +14,11 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppComposeRouteImport } from './routes/app.compose'
 import { Route as AppIdentityRouteImport } from './routes/app.identity'
+import { Route as AppPaymentsRouteImport } from './routes/app.payments'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppVerifyRouteImport } from './routes/app.verify'
+import { Route as PayInvoiceIdRouteImport } from './routes/pay.$invoiceId'
+import { Route as AppPaymentsNewRouteImport } from './routes/app.payments.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -42,6 +45,11 @@ const AppIdentityRoute = AppIdentityRouteImport.update({
   path: '/identity',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPaymentsRoute = AppPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -52,23 +60,39 @@ const AppVerifyRoute = AppVerifyRouteImport.update({
   path: '/verify',
   getParentRoute: () => AppRoute,
 } as any)
+const PayInvoiceIdRoute = PayInvoiceIdRouteImport.update({
+  id: '/pay/$invoiceId',
+  path: '/pay/$invoiceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppPaymentsNewRoute = AppPaymentsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppPaymentsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/payments': typeof AppPaymentsRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
+  '/pay/$invoiceId': typeof PayInvoiceIdRoute
   '/app/': typeof AppIndexRoute
+  '/app/payments/new': typeof AppPaymentsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/payments': typeof AppPaymentsRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
+  '/pay/$invoiceId': typeof PayInvoiceIdRoute
   '/app': typeof AppIndexRoute
+  '/app/payments/new': typeof AppPaymentsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -76,9 +100,12 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/payments': typeof AppPaymentsRouteWithChildren
   '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
+  '/pay/$invoiceId': typeof PayInvoiceIdRoute
   '/app/': typeof AppIndexRoute
+  '/app/payments/new': typeof AppPaymentsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,31 +114,41 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/compose'
     | '/app/identity'
+    | '/app/payments'
     | '/app/settings'
     | '/app/verify'
+    | '/pay/$invoiceId'
     | '/app/'
+    | '/app/payments/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/app/compose'
     | '/app/identity'
+    | '/app/payments'
     | '/app/settings'
     | '/app/verify'
+    | '/pay/$invoiceId'
     | '/app'
+    | '/app/payments/new'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/app/compose'
     | '/app/identity'
+    | '/app/payments'
     | '/app/settings'
     | '/app/verify'
+    | '/pay/$invoiceId'
     | '/app/'
+    | '/app/payments/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  PayInvoiceIdRoute: typeof PayInvoiceIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIdentityRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/payments': {
+      id: '/app/payments'
+      path: '/payments'
+      fullPath: '/app/payments'
+      preLoaderRoute: typeof AppPaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/settings': {
       id: '/app/settings'
       path: '/settings'
@@ -165,12 +209,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppVerifyRouteImport
       parentRoute: typeof AppRoute
     }
+    '/pay/$invoiceId': {
+      id: '/pay/$invoiceId'
+      path: '/pay/$invoiceId'
+      fullPath: '/pay/$invoiceId'
+      preLoaderRoute: typeof PayInvoiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/payments/new': {
+      id: '/app/payments/new'
+      path: '/new'
+      fullPath: '/app/payments/new'
+      preLoaderRoute: typeof AppPaymentsNewRouteImport
+      parentRoute: typeof AppPaymentsRoute
+    }
   }
 }
+
+interface AppPaymentsRouteChildren {
+  AppPaymentsNewRoute: typeof AppPaymentsNewRoute
+}
+
+const AppPaymentsRouteChildren: AppPaymentsRouteChildren = {
+  AppPaymentsNewRoute: AppPaymentsNewRoute,
+}
+
+const AppPaymentsRouteWithChildren = AppPaymentsRoute._addFileChildren(
+  AppPaymentsRouteChildren,
+)
 
 interface AppRouteChildren {
   AppComposeRoute: typeof AppComposeRoute
   AppIdentityRoute: typeof AppIdentityRoute
+  AppPaymentsRoute: typeof AppPaymentsRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRoute
   AppVerifyRoute: typeof AppVerifyRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -179,6 +250,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppComposeRoute: AppComposeRoute,
   AppIdentityRoute: AppIdentityRoute,
+  AppPaymentsRoute: AppPaymentsRouteWithChildren,
   AppSettingsRoute: AppSettingsRoute,
   AppVerifyRoute: AppVerifyRoute,
   AppIndexRoute: AppIndexRoute,
@@ -189,6 +261,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  PayInvoiceIdRoute: PayInvoiceIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

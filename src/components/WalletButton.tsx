@@ -4,8 +4,7 @@ import { shortenAddress } from "@/services/blockchain/arc";
 import { cn } from "@/lib/utils";
 
 export function WalletButton({ className }: { className?: string }) {
-  const { address, connect, disconnect, connecting, wrongNetwork, switchToArc } =
-    useWallet();
+  const { address, connect, disconnect, connecting, wrongNetwork, switchToArc } = useWallet();
 
   if (address) {
     return (

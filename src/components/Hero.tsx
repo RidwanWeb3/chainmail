@@ -23,18 +23,15 @@ export function Hero() {
             <p className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-medium tracking-[0.22em] text-cyan uppercase">
               Built on Arc
             </p>
-            <h1
-              id="hero-title"
-              className="mt-5 text-5xl font-bold tracking-[0.12em] sm:text-7xl"
-            >
+            <h1 id="hero-title" className="mt-5 text-5xl font-bold tracking-[0.12em] sm:text-7xl">
               <span className="text-gradient">CHAINMAIL</span>
             </h1>
             <p className="mt-4 max-w-2xl text-xl font-medium text-foreground sm:text-2xl">
               Verified Communication for the On-Chain Era.
             </p>
             <p className="mt-4 max-w-xl text-base text-muted-foreground">
-              CHAINMAIL brings cryptographic identity and blockchain-backed
-              verification to digital communication.
+              CHAINMAIL brings cryptographic identity and blockchain-backed verification to digital
+              communication.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -65,9 +62,7 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-2">
                 <dt className="text-muted-foreground">CA:</dt>
-                <dd className="font-mono text-foreground">
-                  {contractAddress ?? "Coming Soon"}
-                </dd>
+                <dd className="font-mono text-foreground">{contractAddress ?? "Coming Soon"}</dd>
               </div>
               <div className="text-muted-foreground">Powered by @Circle</div>
             </dl>

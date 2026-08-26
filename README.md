@@ -129,16 +129,14 @@ The images must remain normal image files.
 For example:
 
 public/
-  assets/
-    chainmail-logo.png
-    chainmail-banner.png
-
+assets/
+chainmail-logo.png
+chainmail-banner.png
 
 Use normal image references:
 
 /assets/chainmail-logo.png
 /assets/chainmail-banner.png
-
 
 Do not encode image contents into JSON.
 
@@ -208,7 +206,6 @@ White
 
 Muted Gray
 #94A3B8
-
 
 Do not introduce bright red, orange, yellow, or unrelated colors unless required for system status/error states.
 
@@ -325,7 +322,6 @@ Use:
 target="_blank"
 rel="noopener noreferrer"
 
-
 The button label:
 
 Buy
@@ -374,11 +370,9 @@ Example:
 
 VITE_CHAINMAIL_CONTRACT_ADDRESS=
 
-
 Until configured:
 
 Coming Soon
-
 
 9. HERO SECTION
 
@@ -561,13 +555,12 @@ Allow the recipient to verify the authenticity of the message.
 Visual:
 
 IDENTITY
-    ↓
+↓
 SIGN
-    ↓
+↓
 REGISTER
-    ↓
+↓
 VERIFY
-
 
 Use animated connection lines and subtle glowing nodes.
 
@@ -600,15 +593,14 @@ The original Chainmail implementation demonstrates a blockchain-backed email aut
 Then show the modernized direction:
 
 PGP / Cryptographic Identity
-            ↓
-      Chainmail Layer
-            ↓
-     Blockchain Trust
-            ↓
-           Arc
-            ↓
-        Verification
-
+↓
+Chainmail Layer
+↓
+Blockchain Trust
+↓
+Arc
+↓
+Verification
 
 17. CORE FEATURES
 
@@ -671,15 +663,14 @@ CHAINMAIL is designed to bring verifiable communication infrastructure into the 
 Visual:
 
 CHAINMAIL
-      ↓
+↓
 Cryptographic Identity
-      ↓
+↓
 Verification Layer
-      ↓
+↓
 ARC
-      ↓
+↓
 On-Chain Trust
-
 
 Use a minimal technical visual.
 
@@ -701,7 +692,6 @@ VITE_ARC_RPC_URL=
 VITE_ARC_CHAIN_ID=
 VITE_ARC_EXPLORER_URL=
 VITE_CHAINMAIL_CONTRACT_ADDRESS=
-
 
 Before production deployment, verify the current official Arc configuration.
 
@@ -756,7 +746,6 @@ Arc
 Status
 ✓ Connected
 
-
 For V1, the identity can simply associate a user-selected Chainmail identifier with the connected wallet.
 
 Do not build a complicated naming protocol unless required.
@@ -766,7 +755,6 @@ Do not build a complicated naming protocol unless required.
 Route:
 
 /app
-
 
 Design:
 
@@ -811,14 +799,12 @@ Arc
 Status
 Connected
 
-
 Verification
 
 Messages Verified
 —
 Identity Status
 Connected
-
 
 Do not display fake numerical statistics.
 
@@ -838,7 +824,6 @@ Message
 
 [ SIGN MESSAGE ]
 
-
 When user clicks:
 
 SIGN MESSAGE
@@ -857,7 +842,6 @@ Signature created
 
 Verified
 
-
 Do not call a signature an on-chain transaction.
 
 Wallet signing and blockchain transactions are different.
@@ -867,7 +851,6 @@ Wallet signing and blockchain transactions are different.
 Route:
 
 /app/verify
-
 
 Interface:
 
@@ -886,7 +869,6 @@ Chainmail Identity
 [ ]
 
 [ VERIFY ]
-
 
 Result:
 
@@ -909,13 +891,11 @@ Verified
 Network
 Arc
 
-
 Failure:
 
 ✕ VERIFICATION FAILED
 
 The supplied message could not be authenticated.
-
 
 27. VERIFICATION LOGIC
 
@@ -924,21 +904,20 @@ Separate verification logic from UI.
 Suggested structure:
 
 src/
-  components/
-  pages/
-  hooks/
-  services/
-    blockchain/
-      arc.ts
-      chainmail.ts
-    verification/
-      signature.ts
-      pgp.ts
-    identity/
-      identity.ts
-  types/
-  utils/
-
+components/
+pages/
+hooks/
+services/
+blockchain/
+arc.ts
+chainmail.ts
+verification/
+signature.ts
+pgp.ts
+identity/
+identity.ts
+types/
+utils/
 
 The verification layer should be modular.
 
@@ -952,14 +931,12 @@ The new architecture should leave room for PGP.
 
 Potential future structure:
 
-Wallet Signature
-       +
+Wallet Signature +
 PGP Signature
-       ↓
+↓
 Chainmail Verification
-       ↓
+↓
 Arc
-
 
 For V1:
 
@@ -991,7 +968,6 @@ DEMO
 ✓ Verified
 
 Hello from Chainmail.
-
 
 Do NOT make demo data look like actual blockchain transactions.
 
@@ -1034,13 +1010,12 @@ Do not claim the repository is the new Arc implementation.
 Explain:
 
 Original Chainmail
-        ↓
+↓
 Blockchain Email Authentication
-        ↓
+↓
 Modern CHAINMAIL
-        ↓
+↓
 Arc-focused implementation
-
 
 31. ROADMAP
 
@@ -1128,7 +1103,6 @@ Contract Address
 
 Coming Soon
 
-
 When the contract address is configured:
 
 Show:
@@ -1138,7 +1112,6 @@ Show:
 [ COPY ]
 
 [ VIEW ON EXPLORER ]
-
 
 Only show explorer link when a real address exists.
 
@@ -1235,7 +1208,6 @@ favicon-16x16.png
 favicon-32x32.png
 apple-touch-icon.png
 
-
 Do not redesign the logo.
 
 Do not add text to the favicon.
@@ -1251,7 +1223,6 @@ Do not generate a different visual identity.
 Recommended:
 
 1200 × 630
-
 
 If the supplied 3:1 banner must be adapted to 1200×630, preserve:
 
@@ -1288,7 +1259,6 @@ Metadata:
 
 <meta property="og:type" content="website" />
 
-
 X:
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -1307,7 +1277,6 @@ X:
   name="twitter:image"
   content="/assets/chainmail-banner.png"
 />
-
 
 38. SEO
 
@@ -1439,7 +1408,6 @@ Support:
 
 prefers-reduced-motion
 
-
 43. RESPONSIVE
 
 Must work perfectly on:
@@ -1520,11 +1488,9 @@ Logo alt:
 
 CHAINMAIL
 
-
 Banner alt:
 
 CHAINMAIL — Verified Communication for the On-Chain Era
-
 
 46. ERROR STATES
 
@@ -1623,38 +1589,37 @@ Suggested:
 src/
 │
 ├── components/
-│   ├── Navbar.tsx
-│   ├── Hero.tsx
-│   ├── FeatureCard.tsx
-│   ├── HowItWorks.tsx
-│   ├── Technology.tsx
-│   ├── Roadmap.tsx
-│   ├── Footer.tsx
-│   └── WalletButton.tsx
+│ ├── Navbar.tsx
+│ ├── Hero.tsx
+│ ├── FeatureCard.tsx
+│ ├── HowItWorks.tsx
+│ ├── Technology.tsx
+│ ├── Roadmap.tsx
+│ ├── Footer.tsx
+│ └── WalletButton.tsx
 │
 ├── pages/
-│   ├── Home.tsx
-│   ├── App.tsx
-│   ├── Verify.tsx
-│   ├── Identity.tsx
-│   └── Settings.tsx
+│ ├── Home.tsx
+│ ├── App.tsx
+│ ├── Verify.tsx
+│ ├── Identity.tsx
+│ └── Settings.tsx
 │
 ├── services/
-│   ├── blockchain/
-│   │   ├── arc.ts
-│   │   └── chainmail.ts
-│   │
-│   ├── verification/
-│   │   ├── signature.ts
-│   │   └── pgp.ts
-│   │
-│   └── identity/
-│       └── identity.ts
+│ ├── blockchain/
+│ │ ├── arc.ts
+│ │ └── chainmail.ts
+│ │
+│ ├── verification/
+│ │ ├── signature.ts
+│ │ └── pgp.ts
+│ │
+│ └── identity/
+│ └── identity.ts
 │
 ├── hooks/
 ├── types/
 └── utils/
-
 
 Blockchain logic must never be tightly coupled to UI components.
 
@@ -1667,7 +1632,6 @@ VITE_ARC_CHAIN_ID=
 VITE_ARC_EXPLORER_URL=
 VITE_CHAINMAIL_CONTRACT_ADDRESS=
 VITE_CHAINMAIL_X_URL=
-
 
 If X URL is unknown:
 
@@ -1756,52 +1720,50 @@ VERIFICATION
 Use this exact order:
 
 NAVBAR
-   ↓
+↓
 HERO
-   ↓
+↓
 TRUST / BRAND PILLARS
-   ↓
+↓
 THE PROBLEM
-   ↓
+↓
 WHAT IS CHAINMAIL?
-   ↓
+↓
 HOW IT WORKS
-   ↓
+↓
 CORE FEATURES
-   ↓
+↓
 BUILT ON ARC
-   ↓
+↓
 TECHNOLOGY
-   ↓
+↓
 OPEN SOURCE PROOF
-   ↓
+↓
 ROADMAP
-   ↓
+↓
 CONTRACT — COMING SOON
-   ↓
+↓
 CTA
-   ↓
+↓
 FOOTER
-
 
 56. FINAL APPLICATION FLOW
 
 LANDING PAGE
-      ↓
+↓
 LAUNCH APP
-      ↓
+↓
 CONNECT WALLET
-      ↓
+↓
 CHAINMAIL IDENTITY
-      ↓
+↓
 DASHBOARD
-      ↓
+↓
 SIGN MESSAGE
-      ↓
+↓
 VERIFY MESSAGE
-      ↓
+↓
 VERIFIED
-
 
 This is the MVP.
 
@@ -1945,14 +1907,10 @@ The final website should look like a premium Web3 security/communication infrast
 
 Think:
 
-Cybersecurity
-+
-Cryptography
-+
-Blockchain
-+
-Communication
-+
+Cybersecurity +
+Cryptography +
+Blockchain +
+Communication +
 Arc
 
 The supplied CHAINMAIL logo and banner are the primary visual identity.

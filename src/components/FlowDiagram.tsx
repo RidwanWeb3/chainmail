@@ -1,12 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export function FlowDiagram({
-  steps,
-  className,
-}: {
-  steps: string[];
-  className?: string;
-}) {
+export function FlowDiagram({ steps, className }: { steps: string[]; className?: string }) {
   return (
     <ol className={cn("flex flex-col items-center gap-0", className)} role="list">
       {steps.map((step, i) => (

@@ -224,8 +224,8 @@ function Verify() {
           <div>
             <h1 className="text-2xl font-bold sm:text-3xl">Verify Message</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Recover the signing address from a message and signature. You can also run a
-              guided end-to-end demo.
+              Recover the signing address from a message and signature. You can also run a guided
+              end-to-end demo.
             </p>
           </div>
           <div
@@ -266,23 +266,17 @@ function Verify() {
       <NetworkPrompt />
 
       {sharedReportError && (
-        <section
-          role="alert"
-          className="panel border-destructive/50 p-5 text-sm text-destructive"
-        >
+        <section role="alert" className="panel border-destructive/50 p-5 text-sm text-destructive">
           {sharedReportError}
         </section>
       )}
 
       {sharedReport && !report && (
-        <section
-          role="status"
-          className="panel border-cyan/40 p-5 text-sm"
-        >
+        <section role="status" className="panel border-cyan/40 p-5 text-sm">
           <p className="font-semibold text-foreground">Shared report loaded</p>
           <p className="mt-1 text-muted-foreground">
-            This report was generated from a shareable link. Review the verification steps
-            below or run a fresh verification to regenerate it.
+            This report was generated from a shareable link. Review the verification steps below or
+            run a fresh verification to regenerate it.
           </p>
         </section>
       )}
@@ -346,9 +340,7 @@ function Verify() {
                         <Check className="h-4 w-4 shrink-0 text-turquoise" aria-hidden="true" />
                       ) : null}
                     </div>
-                    {active && (
-                      <p className="mt-3 text-xs text-violet/90">{s.detail}</p>
-                    )}
+                    {active && <p className="mt-3 text-xs text-violet/90">{s.detail}</p>}
                   </button>
                 </li>
               );
@@ -495,13 +487,14 @@ function Verify() {
               />
               {identity && (
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Local identity: <span className="font-semibold text-foreground">@{identity.handle}</span>
+                  Local identity:{" "}
+                  <span className="font-semibold text-foreground">@{identity.handle}</span>
                 </p>
               )}
               {wrongNetwork && (
                 <p role="alert" className="mt-2 text-xs text-destructive">
-                  You are on the wrong network. Use Switch to Arc above for canonical
-                  verification context.
+                  You are on the wrong network. Use Switch to Arc above for canonical verification
+                  context.
                 </p>
               )}
             </div>

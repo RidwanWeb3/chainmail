@@ -16,17 +16,16 @@ export function About() {
           Communication You Can Verify.
         </h2>
         <p className="mt-5 max-w-3xl text-base text-muted-foreground">
-          Traditional communication relies heavily on centralized trust. CHAINMAIL
-          explores a blockchain-backed approach where sender identity, cryptographic
-          signatures, and verification data can establish a verifiable origin for
-          digital communication.
+          Traditional communication relies heavily on centralized trust. CHAINMAIL explores a
+          blockchain-backed approach where sender identity, cryptographic signatures, and
+          verification data can establish a verifiable origin for digital communication.
         </p>
         <div className="mt-6 flex max-w-3xl gap-3 rounded-xl border border-border bg-surface/40 p-4">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-turquoise" aria-hidden="true" />
           <p className="text-sm text-muted-foreground">
-            <strong className="font-semibold text-foreground">Technical note:</strong>{" "}
-            Private message content should remain off-chain. Blockchain should be used
-            for identity, verification metadata, and proofs where appropriate.
+            <strong className="font-semibold text-foreground">Technical note:</strong> Private
+            message content should remain off-chain. Blockchain should be used for identity,
+            verification metadata, and proofs where appropriate.
           </p>
         </div>
       </Reveal>

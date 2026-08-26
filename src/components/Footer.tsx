@@ -29,9 +29,7 @@ export function Footer() {
           </p>
           <div className="mt-5 flex flex-wrap gap-2 text-xs text-muted-foreground">
             <span className="rounded-full border border-border px-3 py-1">Built on Arc</span>
-            <span className="rounded-full border border-border px-3 py-1">
-              Powered by @Circle
-            </span>
+            <span className="rounded-full border border-border px-3 py-1">Powered by @Circle</span>
             <span className="rounded-full border border-border px-3 py-1 font-mono">
               CA: {contractAddress ?? "Coming Soon"}
             </span>
@@ -93,8 +91,8 @@ export function Footer() {
           </div>
           {!xUrl && (
             <p className="mt-3 text-xs text-muted-foreground">
-              X link appears once <code className="font-mono">VITE_CHAINMAIL_X_URL</code>{" "}
-              is configured.
+              X link appears once <code className="font-mono">VITE_CHAINMAIL_X_URL</code> is
+              configured.
             </p>
           )}
           <a
@@ -111,8 +109,8 @@ export function Footer() {
 
       <div className="border-t border-border">
         <p className="mx-auto max-w-7xl px-4 py-6 text-xs text-muted-foreground sm:px-6">
-          © {new Date().getFullYear()} CHAINMAIL. Cryptographic identity and
-          blockchain-backed message verification.
+          © {new Date().getFullYear()} CHAINMAIL. Cryptographic identity and blockchain-backed
+          message verification.
         </p>
       </div>
     </footer>

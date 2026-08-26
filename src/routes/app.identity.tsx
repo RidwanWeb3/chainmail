@@ -3,6 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useWallet } from "@/hooks/useWallet";
 import { useIdentity } from "@/hooks/useIdentity";
 import { IdentityCard } from "@/components/IdentityCard";
+import { handleSchema } from "@/lib/schemas";
+import { ZodError } from "zod";
 
 export const Route = createFileRoute("/app/identity")({
   head: () => ({
@@ -25,6 +27,11 @@ export const Route = createFileRoute("/app/identity")({
   component: Identity,
 });
 
+function firstZodMessage(err: ZodError | Error): string {
+  if (err instanceof ZodError) return err.issues[0]?.message ?? "Invalid input.";
+  return err.message;
+}
+
 function Identity() {
   const { address } = useWallet();
   const { identity, claim, release } = useIdentity();
@@ -35,12 +42,17 @@ function Identity() {
   const onClaim = () => {
     setError(null);
     setSaved(false);
+    const parsed = handleSchema.safeParse(handle);
+    if (!parsed.success) {
+      setError(firstZodMessage(parsed.error));
+      return;
+    }
     try {
-      claim(handle.replace(/^@/, ""));
+      claim(parsed.data);
       setHandle("");
       setSaved(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not establish identity.");
+      setError(firstZodMessage(err instanceof Error ? err : new Error(String(err))));
     }
   };
 
@@ -49,8 +61,8 @@ function Identity() {
       <header>
         <h1 className="text-2xl font-bold sm:text-3xl">Chainmail Identity</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your @handle maps to your wallet address. In this MVP the mapping is stored
-          locally in your browser; on-chain registration arrives with the contract.
+          Your @handle maps to your wallet address. In this MVP the mapping is stored locally in
+          your browser; on-chain registration arrives with the contract.
         </p>
       </header>
 
@@ -75,6 +87,12 @@ function Identity() {
               onChange={(e) => setHandle(e.target.value)}
               placeholder="yourhandle"
               className="w-full bg-transparent py-3 text-sm outline-none"
+              minLength={3}
+              maxLength={20}
+              pattern="[A-Za-z0-9_]+"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
@@ -106,9 +124,7 @@ function Identity() {
         </div>
 
         {!address && (
-          <p className="text-sm text-muted-foreground">
-            Connect a compatible wallet to continue.
-          </p>
+          <p className="text-sm text-muted-foreground">Connect a compatible wallet to continue.</p>
         )}
         {error && (
           <p role="alert" className="text-sm text-destructive">

@@ -61,14 +61,16 @@ export const demoStages: DemoStage[] = [
   {
     id: "keypair",
     title: "2. PGP Key Pair",
-    description: "Generate a PGP key pair. The public fingerprint becomes part of your on-chain identity.",
+    description:
+      "Generate a PGP key pair. The public fingerprint becomes part of your on-chain identity.",
     detail:
       "In production, the private key stays on your device; only the 40-character hex fingerprint is published.",
   },
   {
     id: "sign",
     title: "3. Sign Message",
-    description: "Sign a plaintext message with your private key to produce a detached PGP signature.",
+    description:
+      "Sign a plaintext message with your private key to produce a detached PGP signature.",
     detail:
       "The signature covers the message digest and can be verified by anyone who holds your public key.",
   },

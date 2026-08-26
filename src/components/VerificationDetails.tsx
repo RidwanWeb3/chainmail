@@ -1,4 +1,12 @@
-import { CheckCircle2, XCircle, MinusCircle, FlaskConical, Download, Link2, Check } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  MinusCircle,
+  FlaskConical,
+  Download,
+  Link2,
+  Check,
+} from "lucide-react";
 import { useState } from "react";
 import {
   formatTimestamp,
@@ -61,7 +69,9 @@ export function VerificationDetails({ report }: { report: VerificationReport }) 
               <div className="min-w-0">
                 <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
                   {s.label}
-                  <span className={`text-[11px] font-bold uppercase tracking-wider ${tone[s.status]}`}>
+                  <span
+                    className={`text-[11px] font-bold uppercase tracking-wider ${tone[s.status]}`}
+                  >
                     {statusLabel[s.status]}
                   </span>
                 </p>

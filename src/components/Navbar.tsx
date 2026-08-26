@@ -41,9 +41,7 @@ export function Navbar() {
             height={36}
             className="h-9 w-9"
           />
-          <span className="text-lg font-bold tracking-[0.18em] text-foreground">
-            CHAINMAIL
-          </span>
+          <span className="text-lg font-bold tracking-[0.18em] text-foreground">CHAINMAIL</span>
         </Link>
 
         <ul className="hidden items-center gap-7 lg:flex">

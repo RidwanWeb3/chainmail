@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   Fingerprint,
   Settings as SettingsIcon,
+  DollarSign,
 } from "lucide-react";
 import { WalletProvider, useWallet } from "@/hooks/useWallet";
 import { WalletButton } from "@/components/WalletButton";
@@ -33,6 +34,7 @@ const nav = [
   { to: "/app", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/app/compose", label: "Compose", icon: PenSquare },
   { to: "/app/verify", label: "Verify", icon: ShieldCheck },
+  { to: "/app/payments", label: "Payments", icon: DollarSign },
   { to: "/app/identity", label: "Identity", icon: Fingerprint },
   { to: "/app/settings", label: "Settings", icon: SettingsIcon },
 ] as const;

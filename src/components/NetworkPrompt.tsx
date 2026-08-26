@@ -51,8 +51,8 @@ export function NetworkPrompt() {
           .
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          One-click prompt: approve adding {arcConfig.chainName} (RPC {arcConfig.rpcUrl ?? "configured"})
-          if your wallet does not already list it.
+          One-click prompt: approve adding {arcConfig.chainName} (RPC{" "}
+          {arcConfig.rpcUrl ?? "configured"}) if your wallet does not already list it.
         </p>
       </div>
       <button
@@ -62,9 +62,7 @@ export function NetworkPrompt() {
         className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold tracking-wide uppercase text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         style={{ backgroundImage: "var(--gradient-brand)" }}
       >
-        {switchingNetwork ? (
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-        ) : null}
+        {switchingNetwork ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
         {switchingNetwork ? "Switching…" : "Switch to Arc"}
       </button>
     </div>

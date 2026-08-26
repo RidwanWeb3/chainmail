@@ -29,12 +29,7 @@ const phases = [
     phase: "Phase 03",
     title: "On-Chain Payments",
     status: "Future",
-    items: [
-      "USDC payment requests",
-      "Payment links",
-      "Invoices",
-      "Payment confirmations",
-    ],
+    items: ["USDC payment requests", "Payment links", "Invoices", "Payment confirmations"],
   },
   {
     phase: "Phase 04",
@@ -56,9 +51,7 @@ export function Roadmap() {
       aria-labelledby="roadmap-title"
       className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6"
     >
-      <p className="text-xs font-semibold tracking-[0.24em] text-violet uppercase">
-        Roadmap
-      </p>
+      <p className="text-xs font-semibold tracking-[0.24em] text-violet uppercase">Roadmap</p>
       <h2 id="roadmap-title" className="mt-3 text-3xl font-bold sm:text-4xl">
         Built in stages, not promises.
       </h2>

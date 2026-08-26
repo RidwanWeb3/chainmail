@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Copy, Check } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Copy, Check, ArrowRight, ShieldCheck } from "lucide-react";
 import { useWallet } from "@/hooks/useWallet";
 import { useIdentity } from "@/hooks/useIdentity";
 import { DemoBadge } from "@/components/IdentityCard";
+import { NetworkPrompt } from "@/components/NetworkPrompt";
+import { addressSchema, handleSchema, messageSchema, maybeHandleSchema } from "@/lib/schemas";
+import { ZodError } from "zod";
+import { encodeReport } from "@/services/report/verificationReport";
+import { step, type VerificationReport } from "@/services/verification/steps";
 
 export const Route = createFileRoute("/app/compose")({
   head: () => ({
@@ -36,8 +41,13 @@ const statusLabel: Record<Status, string> = {
   error: "Error",
 };
 
+function firstZodMessage(err: ZodError | Error): string {
+  if (err instanceof ZodError) return err.issues[0]?.message ?? "Invalid input.";
+  return err.message;
+}
+
 function Compose() {
-  const { address, signMessage } = useWallet();
+  const { address, chainId, signMessage } = useWallet();
   const { identity } = useIdentity();
   const [recipient, setRecipient] = useState("");
   const [message, setMessage] = useState("");
@@ -49,19 +59,29 @@ function Compose() {
   const onSign = async () => {
     setError(null);
     setSignature(null);
-    if (!address) {
+
+    const recipientResult = maybeHandleSchema.safeParse(recipient);
+    if (!recipientResult.success) {
+      setStatus("error");
+      setError("Invalid recipient handle. 3–20 characters: letters, numbers or underscores only.");
+      return;
+    }
+    const messageResult = messageSchema.safeParse(message);
+    if (!messageResult.success) {
+      setStatus("error");
+      setError(firstZodMessage(messageResult.error));
+      return;
+    }
+    const addressResult = addressSchema.safeParse(address ?? "");
+    if (!addressResult.success) {
       setStatus("error");
       setError("Connect a compatible wallet to continue.");
       return;
     }
-    if (!message.trim()) {
-      setStatus("error");
-      setError("Write a message before signing.");
-      return;
-    }
+
     try {
       setStatus("waiting");
-      const sig = await signMessage(message);
+      const sig = await signMessage(messageResult.data);
       setStatus("signing");
       setSignature(sig);
       setStatus("created");
@@ -82,15 +102,75 @@ function Compose() {
     }
   };
 
+  const shareableLink = (() => {
+    if (!signature || !address) return null;
+    const handle = maybeHandleSchema.safeParse(recipient).data;
+    const senderParsed = addressSchema.safeParse(address).data;
+    if (!senderParsed) return null;
+    // Build a lightweight "pre-verified" report that Verify page can decode.
+    const steps = [
+      step(
+        "network",
+        "Network check",
+        chainId
+          ? `Signature produced on chain ${String(chainId)}.`
+          : "Produced without explicit network context.",
+        "skipped",
+      ),
+      step(
+        "pgp",
+        "PGP key check",
+        "PGP check disabled on signed payload — verify explicitly.",
+        "skipped",
+      ),
+      step(
+        "signature",
+        "Signature validity",
+        "Validity pending cryptographic verification.",
+        "skipped",
+      ),
+      step(
+        "identity",
+        "Identity match",
+        identity?.handle
+          ? `Sender claimed identity @${identity.handle}.`
+          : "No @handle identity attached.",
+        "skipped",
+      ),
+    ];
+    const report: VerificationReport = {
+      id: `compose-${Date.now().toString(36)}`,
+      createdAt: new Date().toISOString(),
+      mode: "live",
+      sender: senderParsed,
+      identity: identity?.handle ? `@${identity.handle}` : null,
+      message: messageSchema.parse(message),
+      signature,
+      recovered: null,
+      verified: false,
+      steps,
+    };
+    const encoded = encodeReport(report);
+    try {
+      return `/app/verify?r=${encodeURIComponent(encoded)}`;
+    } catch {
+      return null;
+    }
+  })();
+
+  // Satisfy handleSchema import (keeps bundle tree-shake minimal, guards recipient handle).
+  void handleSchema;
+
   return (
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold sm:text-3xl">Compose Message</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Signing produces an off-chain cryptographic signature. It is not a blockchain
-          transaction.
+          Signing produces an off-chain cryptographic signature. It is not a blockchain transaction.
         </p>
       </header>
+
+      <NetworkPrompt />
 
       <form
         className="panel space-y-5 p-6"
@@ -109,7 +189,15 @@ function Compose() {
             onChange={(e) => setRecipient(e.target.value)}
             placeholder="@recipient"
             className="mt-2 w-full rounded-xl border border-input bg-surface/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground"
+            minLength={3}
+            maxLength={21}
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
           />
+          <p className="mt-2 text-xs text-muted-foreground">
+            Optional: recipient @handle (3–20 letters, numbers or underscores).
+          </p>
         </div>
         <div>
           <label htmlFor="message" className="text-sm font-medium">
@@ -122,13 +210,18 @@ function Compose() {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your message..."
             className="mt-2 w-full rounded-xl border border-input bg-surface/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground"
+            maxLength={50_000}
+            spellCheck={true}
           />
+          <p className="mt-2 text-xs text-muted-foreground">
+            {message.length.toLocaleString()} / 50,000 characters.
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
           <button
             type="submit"
-            disabled={status === "waiting" || status === "signing"}
+            disabled={status === "waiting" || status === "signing" || !address}
             className="rounded-full px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             style={{ backgroundImage: "var(--gradient-brand)" }}
           >
@@ -148,22 +241,34 @@ function Compose() {
 
       {signature && (
         <section className="panel p-6" aria-labelledby="signature-title">
-          <div className="flex items-center justify-between gap-3">
-            <h2 id="signature-title" className="text-lg font-semibold">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="signature-title" className="text-lg font-semibold flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-turquoise" aria-hidden="true" />
               Signature created
             </h2>
-            <button
-              type="button"
-              onClick={copySignature}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs font-semibold"
-            >
-              {copied ? (
-                <Check className="h-3.5 w-3.5 text-turquoise" aria-hidden="true" />
-              ) : (
-                <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copySignature}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs font-semibold"
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5 text-turquoise" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                )}
+                {copied ? "Copied" : "Copy signature"}
+              </button>
+              {shareableLink && (
+                <Link
+                  to={shareableLink}
+                  className="inline-flex items-center gap-2 rounded-full border border-cyan/40 bg-cyan/10 px-4 py-2 text-xs font-semibold tracking-wide uppercase text-cyan hover:bg-cyan/15"
+                >
+                  Open in Verify
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
               )}
-              {copied ? "Copied" : "Copy"}
-            </button>
+            </div>
           </div>
           <dl className="mt-4 space-y-3 text-sm">
             <div>
@@ -183,8 +288,9 @@ function Compose() {
             </div>
           </dl>
           <p className="mt-4 text-xs text-muted-foreground">
-            Share the message, sender address and signature so the recipient can verify
-            it.
+            Share the message, sender address and signature so the recipient can verify it. Use{" "}
+            <span className="font-semibold text-cyan">Open in Verify</span> to jump straight to the
+            Verify page with the payload pre-filled via the shareable link.
           </p>
         </section>
       )}

@@ -12,9 +12,7 @@ export type VerifyWithReportInput = {
   expectedChainId?: number | null;
 };
 
-export async function verifyWithReport(
-  input: VerifyWithReportInput,
-): Promise<VerificationReport> {
+export async function verifyWithReport(input: VerifyWithReportInput): Promise<VerificationReport> {
   const steps: VerificationStep[] = [];
   const onCorrectNetwork =
     !input.expectedChainId || !input.chainId ? null : input.chainId === input.expectedChainId;
@@ -50,14 +48,7 @@ export async function verifyWithReport(
     );
   }
 
-  steps.push(
-    step(
-      "pgp",
-      "PGP key check",
-      PGP_STATUS,
-      "skipped",
-    ),
-  );
+  steps.push(step("pgp", "PGP key check", PGP_STATUS, "skipped"));
 
   const startedAt = Date.now();
   const result = await verifyWalletSignature(input);
@@ -83,12 +74,7 @@ export async function verifyWithReport(
     );
   } else {
     steps.push(
-      step(
-        "signature",
-        "Signature validity",
-        `Signature check failed: ${result.reason}`,
-        "failed",
-      ),
+      step("signature", "Signature validity", `Signature check failed: ${result.reason}`, "failed"),
     );
     steps.push(
       step(
