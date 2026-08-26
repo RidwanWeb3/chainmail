@@ -155,13 +155,8 @@ function Verify() {
                 <dt className="text-muted-foreground">Recovered signer</dt>
                 <dd className="font-mono break-all">{result.signer}</dd>
               </div>
-              {result.matches !== null && (
-                <div>
-                  <dt className="text-muted-foreground">Matches expected sender</dt>
-                  <dd>{result.matches ? "Yes" : "No"}</dd>
-                </div>
-              )}
             </dl>
+
           ) : (
             <p className="mt-3 text-sm text-muted-foreground">{result.reason}</p>
           )}
