@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppComposeRouteImport } from './routes/app.compose'
 import { Route as AppIdentityRouteImport } from './routes/app.identity'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppVerifyRouteImport } from './routes/app.verify'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const AppIdentityRoute = AppIdentityRouteImport.update({
   path: '/identity',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppVerifyRoute = AppVerifyRouteImport.update({
   id: '/verify',
   path: '/verify',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
   '/app/': typeof AppIndexRoute
 }
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
   '/app': typeof AppIndexRoute
 }
@@ -68,21 +76,35 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/app/compose': typeof AppComposeRoute
   '/app/identity': typeof AppIdentityRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/verify': typeof AppVerifyRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/app' | '/app/compose' | '/app/identity' | '/app/verify' | '/app/'
+    | '/'
+    | '/app'
+    | '/app/compose'
+    | '/app/identity'
+    | '/app/settings'
+    | '/app/verify'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app/compose' | '/app/identity' | '/app/verify' | '/app'
+  to:
+    | '/'
+    | '/app/compose'
+    | '/app/identity'
+    | '/app/settings'
+    | '/app/verify'
+    | '/app'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/app/compose'
     | '/app/identity'
+    | '/app/settings'
     | '/app/verify'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -129,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIdentityRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/verify': {
       id: '/app/verify'
       path: '/verify'
@@ -142,6 +171,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppComposeRoute: typeof AppComposeRoute
   AppIdentityRoute: typeof AppIdentityRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppVerifyRoute: typeof AppVerifyRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -149,6 +179,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppComposeRoute: AppComposeRoute,
   AppIdentityRoute: AppIdentityRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppVerifyRoute: AppVerifyRoute,
   AppIndexRoute: AppIndexRoute,
 }
