@@ -25,32 +25,35 @@ export const Route = createFileRoute("/app/verify")({
 });
 
 type Result =
-  | { ok: true; signer: string; matches: boolean | null }
+  | { ok: true; signer: string }
   | { ok: false; reason: string };
 
 function Verify() {
   const [message, setMessage] = useState("");
   const [signature, setSignature] = useState("");
-  const [expected, setExpected] = useState("");
+  const [sender, setSender] = useState("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
 
   const onVerify = async () => {
     setResult(null);
-    if (!message.trim() || !signature.trim()) {
-      setResult({ ok: false, reason: "Provide both the message and the signature." });
+    if (!message.trim() || !signature.trim() || !sender.trim()) {
+      setResult({
+        ok: false,
+        reason: "Provide the sender address, the message and the signature.",
+      });
       return;
     }
     setBusy(true);
     try {
       const res = await verifyWalletSignature({
+        sender: sender.trim(),
         message,
         signature: signature.trim(),
-        expectedAddress: expected.trim() || undefined,
       });
       setResult(
-        res.valid
-          ? { ok: true, signer: res.signer, matches: res.matchesExpected }
+        res.status === "verified"
+          ? { ok: true, signer: res.recovered }
           : { ok: false, reason: res.reason },
       );
     } catch (err) {
@@ -63,7 +66,8 @@ function Verify() {
     }
   };
 
-  const verified = result?.ok === true && result.matches !== false;
+  const verified = result?.ok === true;
+
 
   return (
     <div className="space-y-6">
