@@ -112,17 +112,18 @@ function Verify() {
           />
         </div>
         <div>
-          <label htmlFor="v-expected" className="text-sm font-medium">
-            Expected sender address <span className="text-muted-foreground">(optional)</span>
+          <label htmlFor="v-sender" className="text-sm font-medium">
+            Claimed sender address
           </label>
           <input
-            id="v-expected"
-            value={expected}
-            onChange={(e) => setExpected(e.target.value)}
+            id="v-sender"
+            value={sender}
+            onChange={(e) => setSender(e.target.value)}
             placeholder="0x..."
             className="mt-2 w-full rounded-xl border border-input bg-surface/50 px-4 py-3 font-mono text-xs"
           />
         </div>
+
         <button
           type="submit"
           disabled={busy}
